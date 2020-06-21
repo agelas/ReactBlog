@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Header from "./components/Header"
 import Posts from "./components/Posts"
 import Post from "./components/Post"
+import NotFound from "./components/NotFound"
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import './App.css';
 
@@ -37,13 +38,21 @@ class App extends Component {
         <Header />
         <Switch>
           <Route
+            exact
+            path="/"
+            render={ () => <Posts posts={this.state.posts}/> }
+          />
+          <Route
             path="/post/:postSlug"
             render={props => {
               const post = this.state.posts.find(post => post.slug === props.match.params.postSlug);
-              return <Post post={post} />
-
+              if (post) 
+                return <Post post = {post} />;
+              else
+                return <NotFound/>
             }}
           />
+          <Route component={NotFound} />
         </Switch>
         </div>
       </Router>
