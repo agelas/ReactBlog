@@ -14,11 +14,24 @@ const App = (props) => {
 
   const addNewPost = post => {
     post.id = posts.length + 1;
-    post.slug = encodeURIComponent(
-      post.title.toLowerCase().split(" ").join("-")
-    ); 
+    post.slug = getNewSlugFromTitle(post.title);
     setPosts([...posts, post]);
     setMessage('saved') //Um hm //ok this works what is wrong with javascript
+    setTimeout( () => {
+      setMessage(null)
+    }, 1600);
+  };
+
+  const getNewSlugFromTitle = (title) =>
+    encodeURIComponent(title.toLowerCase().split(" ").join("-"));
+
+  const updatePost = (post) => {
+    post.slug = getNewSlugFromTitle(post.title)
+    const index = posts.findIndex((p) => p.id === post.id); //Find index for 1st post with same slug as one passed in the URL
+    const oldPosts = posts.slice(0, index).concat(posts.slice(index + 1)); //Use index to remove post that was just edited from list of posts, then add new post back
+    const updatedPosts = [...oldPosts, post].sort((a, b) => a.id - b.id); //Sort posts based on ID so they are in same order as before
+    setPosts(updatedPosts);
+    setMessage(`updated`)
     setTimeout( () => {
       setMessage(null)
     }, 1600);
@@ -43,27 +56,35 @@ const App = (props) => {
           render={props => {
             const post = posts.find(post => post.slug === props.match.params.postSlug);
             //props.match.params.postSlug is method from React Router 
-            if (post) 
+            if (post) {
               return <Post post = {post} />;
-            else
-              return <NotFound/>
+            } else {
+              return <Redirect to="/" />;
+            }
           }}
         />
         <Route
           exact
           path="/new"
           render={ () => (
-            <PostForm addNewPost={addNewPost} /> //So this is important idk why yet though
+            <PostForm addNewPost={addNewPost}
+              post = {{ //Pass in an empty post object into PostForm so it always expects a post to edit
+                id: 0,
+                slug: "",
+                title: "",
+                content: ""
+              }}
+            /> //So this is important for the whole props thing idk why yet though
           )}
         />
         <Route
-            path="/edit:postSlug"
-            render={props => {
-              const post = this.StaticRange.posts.find(
-                post => post.slug === props.match.params.postSlug
+            path="/edit/:postSlug"
+            render={(props) => {
+              const post = posts.find(
+                (post) => post.slug === props.match.params.postSlug
               );
               if (post) {
-                return <PostForm post={post} />;
+                return <PostForm updatePost={updatePost} post={post} />;
               } else {
                 return <Redirect to="/" />;
               }

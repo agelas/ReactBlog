@@ -5,8 +5,12 @@ import 'react-quill/dist/quill.snow.css';
 
 class PostForm extends Component {
     state= {
-        title: "",
-        content: "",
+        post: {
+            id: this.props.post.id,
+            slug: this.props.post.slug,
+            title: this.props.post.title,
+            content: this.props.post.content
+        },
         saved: false
     };
 
@@ -35,16 +39,27 @@ class PostForm extends Component {
                         <label htmlFor="form-title">Title:</label>
                         <br />
                         <input
+                            defaultValue={this.props.title}
                             id="form-title"
-                            value={this.state.title}
-                            onChange={e => this.setState({title: e.target.value})}
+                            value={this.state.post.title}
+                            onChange={e => this.setState({
+                                post: {
+                                    ...this.state.post,
+                                    title: e.target.value
+                                }
+                            })}
                         />
                     </p>
                     <p>
                         <label htmlFor="form-content">Content:</label>
                     </p>
                     <Quill
-                        onChange={(content, delta, source, editor) => {this.setState({content: editor.getContents() });
+                        defaultValue={this.state.post.content}
+                        onChange={(content, delta, source, editor) => {
+                            this.setState({
+                                ...this.state.post, //some destructuring
+                                content: editor.getContents() 
+                            });
                         }}
                     />
                     <p>
