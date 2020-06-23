@@ -45,7 +45,7 @@ const App = (props) => {
           exact
           path="/new"
           render={ () => (
-            <PostForm addNewPost={addNewPost} />
+            <PostForm addNewPost={addNewPost} /> //So this is important idk why yet though
           )}
         />
         <Route component={NotFound} /> {/*Idk why yet but this HAS to be the last route*/}
@@ -56,6 +56,4 @@ const App = (props) => {
   );
   
 };
-
-
 export default App;

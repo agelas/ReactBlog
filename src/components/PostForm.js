@@ -7,6 +7,7 @@ class PostForm extends Component {
     state= {
         title: "",
         content: "",
+        saved: false
     };
 
     handlePostForm = e => {
@@ -16,13 +17,17 @@ class PostForm extends Component {
                 title: this.state.title,
                 content: this.state.content
             };
-            this.props.addNewPost(post);
+        this.props.addNewPost(post); //So PostForm is a child of App.js so this is allowed?
+        this.setState({saved: true});
         } else {
             alert("Title Required");
         }
     };
 
     render() {
+        if (this.state.saved === true) {
+            return <Redirect to="/" />;
+        }
         return(
             <form className="container" onSubmit = {this.handlePostForm}>
                 <h1>Add a New Post</h1>
