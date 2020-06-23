@@ -19,6 +19,10 @@ const App = (props) => {
     ); 
     setPosts([...posts, post]);
     setMessage('saved') //Um hm
+    setTimeout( () => {
+      setMessage(null)
+    }, 1600
+    );
   };
   
   return(
