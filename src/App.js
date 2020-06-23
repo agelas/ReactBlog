@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
-import Header from "./components/Header"
-import Posts from "./components/Posts"
-import Post from "./components/Post"
-import NotFound from "./components/NotFound"
-import Message from "./components/Message"
+import Header from "./components/Header";
+import Posts from "./components/Posts";
+import Post from "./components/Post";
+import NotFound from "./components/NotFound";
+import Message from "./components/Message";
 import PostForm from './components/PostForm';
-import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import {BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom";
 import './App.css';
 
 const App = (props) => {
@@ -18,11 +18,10 @@ const App = (props) => {
       post.title.toLowerCase().split(" ").join("-")
     ); 
     setPosts([...posts, post]);
-    setMessage('saved') //Um hm
+    setMessage('saved') //Um hm //ok this works what is wrong with javascript
     setTimeout( () => {
       setMessage(null)
-    }, 1600
-    );
+    }, 1600);
   };
   
   return(
@@ -56,6 +55,19 @@ const App = (props) => {
           render={ () => (
             <PostForm addNewPost={addNewPost} /> //So this is important idk why yet though
           )}
+        />
+        <Route
+            path="/edit:postSlug"
+            render={props => {
+              const post = this.StaticRange.posts.find(
+                post => post.slug === props.match.params.postSlug
+              );
+              if (post) {
+                return <PostForm post={post} />;
+              } else {
+                return <Redirect to="/" />;
+              }
+            }}
         />
         <Route component={NotFound} /> {/*Idk why yet but this HAS to be the last route*/}
         
