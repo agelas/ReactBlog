@@ -3,12 +3,14 @@ import Header from "./components/Header"
 import Posts from "./components/Posts"
 import Post from "./components/Post"
 import NotFound from "./components/NotFound"
+import Message from "./components/Message"
+import PostForm from './components/PostForm';
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import './App.css';
-import PostForm from './components/PostForm';
 
 const App = (props) => {
   const [posts, setPosts] = useState([]);
+  const [message, setMessage] = useState(null)
 
   const addNewPost = post => {
     post.id = posts.length + 1;
@@ -16,6 +18,7 @@ const App = (props) => {
       post.title.toLowerCase().split(" ").join("-")
     ); 
     setPosts([...posts, post]);
+    setMessage('saved') //Um hm
   };
   
   return(
@@ -23,6 +26,8 @@ const App = (props) => {
       <div className="App">
       APP HERE
       <Header />
+      {/*Causes Message component to render and receive the message type as props*/}
+      {message && <Message type={message} />} 
       <Switch>
         <Route
         //Displays all posts we have
