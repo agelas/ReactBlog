@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
     Functional component that destructures posts from props.
 */
 
-const Posts = ({posts}) => (
+const Posts = ({posts, deletePost}) => (
     <article className="posts container">
         <h1>Posts</h1>
         <ul>
@@ -17,6 +17,14 @@ const Posts = ({posts}) => (
                     </h2>
                     <p>
                         <Link to={`/edit/${post.slug}`}>Edit</Link>
+                        {" | "}
+                        <button
+                            className="linkLike" //React doesn't like links that don't go anywhere,
+                                                //so just using a button that is styled like a link using CSS
+                            onClick= { () => deletePost(post)}
+                        >
+                        Delete
+                        </button>
                     </p>
                 </li>
             ))}

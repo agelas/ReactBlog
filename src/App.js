@@ -36,6 +36,17 @@ const App = (props) => {
       setMessage(null)
     }, 1600);
   };
+
+  const deletePost = (post) => {
+    if(window.confirm("Delete this post?")) {
+        const updatedPosts = posts.filter((p) => p.id !== post.id);
+        setPosts(updatedPosts);
+        setMessage(`deleted`)
+        setTimeout( () => {
+          setMessage(null)
+        }, 1600);
+    };
+  };
   
   return(
     <Router>
@@ -49,7 +60,7 @@ const App = (props) => {
         //Displays all posts we have
           exact
           path="/"
-          render={ () => <Posts posts={posts}/> }
+          render={ () => <Posts posts={posts} deletePost={deletePost}/> } //How posts and deletePost are passed in
         />
         <Route
           path="/post/:postSlug" //Define the path to be loaded to Post component
