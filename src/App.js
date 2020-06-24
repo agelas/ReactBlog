@@ -12,7 +12,7 @@ const App = (props) => {
   const [posts, setPosts] = useState([]);
   const [message, setMessage] = useState(null)
 
-  const addNewPost = post => {
+  const addNewPost = (post) => {
     post.id = posts.length + 1;
     post.slug = getNewSlugFromTitle(post.title);
     setPosts([...posts, post]);

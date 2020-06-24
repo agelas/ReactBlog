@@ -1,73 +1,81 @@
-import React, {Component} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import {Redirect} from "react-router-dom";
 import Quill from "react-quill"
 import 'react-quill/dist/quill.snow.css';
 
-class PostForm extends Component {
-    state= {
-        post: {
-            id: this.props.post.id,
-            slug: this.props.post.slug,
-            title: this.props.post.title,
-            content: this.props.post.content
-        },
-        saved: false
-    };
+const PostForm = ({post: propsPost, addNewPost, updatePost}) => {
+    const [post, setPost] = useState({...propsPost});
+    const [saved, setSaved] = useState(false);
 
-    handlePostForm = e => {
+    const prevPostRef = useRef();
+    useEffect( () => {
+        prevPostRef.current = post;
+    }, [post]);
+    const prevPost = prevPostRef.current;
+
+    const quillRef = React.useRef();
+    useEffect( () => {
+        if (prevPost && quillRef.current) {
+            if (propsPost.id !== prevPost.id) {
+                setPost({...propsPost});
+                quillRef.current.getEditor().setContents(``);
+            }
+        }
+    }, [prevPost, propsPost]);
+
+    const handlePostForm = (e) => {
         e.preventDefault();
-        if (this.state.title) {
-            const post = {
-                title: this.state.title,
-                content: this.state.content
-            };
-        this.props.addNewPost(post); //So PostForm is a child of App.js so this is allowed?
-        this.setState({saved: true});
+        if (post.title) {
+            if(updatePost) {
+                updatePost(post);
+            } else {
+                addNewPost(post);
+            }
+            setSaved(true);
         } else {
             alert("Title Required");
         }
     };
 
-    render() {
-        if (this.state.saved === true) {
-            return <Redirect to="/" />;
-        }
-        return(
-            <form className="container" onSubmit = {this.handlePostForm}>
-                <h1>Add a New Post</h1>
-                    <p>
-                        <label htmlFor="form-title">Title:</label>
-                        <br />
-                        <input
-                            defaultValue={this.props.title}
-                            id="form-title"
-                            value={this.state.post.title}
-                            onChange={e => this.setState({
-                                post: {
-                                    ...this.state.post,
-                                    title: e.target.value
-                                }
-                            })}
-                        />
-                    </p>
-                    <p>
-                        <label htmlFor="form-content">Content:</label>
-                    </p>
-                    <Quill
-                        defaultValue={this.state.post.content}
-                        onChange={(content, delta, source, editor) => {
-                            this.setState({
-                                ...this.state.post, //some destructuring
-                                content: editor.getContents() 
-                            });
-                        }}
-                    />
-                    <p>
-                        <button type = "submit">Save</button>
-                    </p>
-            </form>
-        );
+    if (saved === true) {
+        return <Redirect to="/" />;
     }
+    return(
+        <form className="container" onSubmit = {handlePostForm}>
+            <h1>Add a New Post</h1>
+                <p>
+                    <label htmlFor="form-title">Title:</label>
+                    <br />
+                    <input
+                        defaultValue={post.title}
+                        id="form-title"
+                        value={post.title}
+                        onChange={e => 
+                            setPost({
+                                ...post,
+                                title: e.target.value    
+                            })
+                        }
+                    />
+                </p>
+                <p>
+                    <label htmlFor="form-content">Content:</label>
+                </p>
+                <Quill
+                    ref={quillRef}
+                    defaultValue={post.content}
+                    onChange={(content, delta, source, editor) => {
+                        setPost({
+                            ...post, //some destructuring
+                            content: editor.getContents() 
+                        });
+                    }}
+                />
+                <p>
+                    <button type = "submit">Save</button>
+                </p>
+        </form>
+    );
 }
 
 export default PostForm;
