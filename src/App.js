@@ -16,8 +16,8 @@ const App = (props) => {
     post.id = posts.length + 1;
     post.slug = getNewSlugFromTitle(post.title);
     setPosts([...posts, post]);
-    setMessage('saved') //Um hm //ok this works what is wrong with javascript
-    setTimeout( () => {
+    setMessage('saved') 
+    setTimeout( () => { //Can probably refactor this out later
       setMessage(null)
     }, 1600);
   };
@@ -85,7 +85,7 @@ const App = (props) => {
                 title: "",
                 content: ""
               }}
-            /> //So this is important for the whole props thing idk why yet though
+            /> 
           )}
         />
         <Route

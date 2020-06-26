@@ -17,7 +17,7 @@ const Post = ({post}) => {
             <div
                 className="content"
                 dangerouslySetInnerHTML={{__html: contentHTML
-                }} //Letting raw HTML run on the page can be an oof
+                }} //Letting raw HTML run on the page can be an oof but it works here
             />
         </article>
     );

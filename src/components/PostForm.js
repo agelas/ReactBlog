@@ -2,7 +2,9 @@ import React, {useState, useEffect, useRef} from "react";
 import {Redirect} from "react-router-dom";
 import Quill from "react-quill"
 import 'react-quill/dist/quill.snow.css';
-
+/*
+    Handles all the creating/editing of posts
+*/
 const PostForm = ({post: propsPost, addNewPost, updatePost}) => {
     const [post, setPost] = useState({...propsPost});
     const [saved, setSaved] = useState(false);

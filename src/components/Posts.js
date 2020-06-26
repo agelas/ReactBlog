@@ -8,8 +8,10 @@ const Posts = ({posts, deletePost}) => (
     <article className="posts container">
         <h1>Posts</h1>
         <ul>
+            {/*If no posts yet*/}
             {posts.length < 1 && ( <li key="empty">No Posts yet</li>
-            )}
+            )} 
+            {/*Display all posts*/}
             {posts.map(post => (
                 <li key = {post.id}>
                     <h2>
