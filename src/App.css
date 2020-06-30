@@ -48,12 +48,18 @@
   }
 
 .App article {
-  padding: 1rem;  
+  padding: 1rem;
+  border: 4px ridge #353944;
+  width: 1000px;
+  height: 500px;
+  margin: 0 auto;
+  margin-top: -100px;
 }
 
   .App article ul {
     margin: 0;
     padding: 0;  
+    border: 4px dotted #353944;
   }
 
   .App article ul li {
